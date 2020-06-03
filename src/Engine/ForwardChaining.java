@@ -29,10 +29,21 @@ public class ForwardChaining extends Algorithm
 
 	public String execute() 
 	{
+		if ( PL_FC_Entails() )
+		{
+			return "Yes";
+		}
+		else
+		{
+			return "No";
+		}
+	}
+	
+	private boolean PL_FC_Entails()
+	{
 		while ( !( fAgenda.isEmpty() ) )
 		{
 			String lPremise = fAgenda.pop();
-			System.out.println("Now inferring " + lPremise);
 			
 			if ( !fInferred.get(lPremise) )
 			{
@@ -43,13 +54,14 @@ public class ForwardChaining extends Algorithm
 					if ( lSentence.getLeftLiterals().contains(lPremise) )
 					{
 						lSentence.decrementCount();
+						
 						if ( lSentence.getCount() == 0 )
 						{
 							if ( lSentence.getRightOperand() == fQuery )
 							{
 								fInferred.replace(lSentence.getRightOperand(), true);
 								
-								return "YES";
+								return true;
 							}
 							
 							fAgenda.addLast( lSentence.getRightOperand() );
@@ -59,6 +71,7 @@ public class ForwardChaining extends Algorithm
 			}
 		}
 		
-		return "NO";
+		System.out.println(fInferred);
+		return false;
 	}
 }
