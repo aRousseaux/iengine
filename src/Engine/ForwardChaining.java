@@ -2,6 +2,7 @@ package Engine;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import KnowledgeBase.*;
 
@@ -31,7 +32,19 @@ public class ForwardChaining extends Algorithm
 	{
 		if ( PL_FC_Entails() )
 		{
-			return "Yes";
+			StringBuilder sb = new StringBuilder();
+			sb.append("YES: ");
+			
+			for (Map.Entry<String, Boolean> lLiteral : fInferred.entrySet())
+			{
+				if (lLiteral.getValue())
+				{
+					sb.append(lLiteral.getKey());
+					sb.append(",");
+				}
+			}
+			sb.deleteCharAt(sb.length()-1);
+			return sb.toString();
 		}
 		else
 		{
@@ -57,11 +70,9 @@ public class ForwardChaining extends Algorithm
 						
 						if ( lSentence.getCount() == 0 )
 						{
-							System.out.println("comparing: " + lSentence.getRightOperand() + ", " + fQuery);
 							if ( lSentence.getRightOperand().equals(fQuery) )
 							{
 								fInferred.replace(lSentence.getRightOperand(), true);
-								
 								return true;
 							}
 							

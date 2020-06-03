@@ -14,10 +14,6 @@ public abstract class Algorithm
 		
 		fQuery = aQuery;
 		fKnowledge = aKnowledge;
-		
-		System.out.print( toString() );
-		
-		System.out.println( "Literals:\n" + aKnowledge.getLiterals() );
 	}
 	
 	public String toString()
@@ -32,15 +28,4 @@ public abstract class Algorithm
 	}
 	
 	public abstract String execute();
-	
-	/*private boolean isFact( String aQuery )
-	{
-		for ( Fact lFact : fKnowledge.getFacts() )
-		{
-			if ( lFact.isEqual( aQuery ) )
-				return true;
-		}
-		
-		return false;
-	}*/
 }
