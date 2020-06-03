@@ -34,13 +34,13 @@ public class ForwardChaining extends Algorithm
 			String lPremise = fAgenda.pop();
 			System.out.println("Now inferring " + lPremise);
 			
-			if ( !fInferred.containsKey(lPremise) )
+			if ( !fInferred.get(lPremise) )
 			{
 				fInferred.replace(lPremise, true);
 				
 				for ( Clause lSentence : fKnowledge.getClauses() )
 				{
-					if ( lSentence.getLeftOperand().equals(lPremise) )
+					if ( lSentence.getLeftLiterals().contains(lPremise) )
 					{
 						lSentence.decrementCount();
 						if ( lSentence.getCount() == 0 )
@@ -48,6 +48,7 @@ public class ForwardChaining extends Algorithm
 							if ( lSentence.getRightOperand() == fQuery )
 							{
 								fInferred.replace(lSentence.getRightOperand(), true);
+								
 								return "YES";
 							}
 							
