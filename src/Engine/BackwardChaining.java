@@ -9,10 +9,20 @@ public class BackwardChaining extends Algorithm
 		super(aKnowledgeBase, aQuery, "Backward Chaining");
 	}
 
-	@Override
-	public String execute() {
-		// TODO Auto-generated method stub
-		return null;
+	public String execute() 
+	{
+		if ( PL_BC_Entails() )
+		{
+			return "YES";
+		}
+		else
+		{
+			return "NO";
+		}
 	}
 
+	private boolean PL_BC_Entails()
+	{
+		return false;
+	}
 }

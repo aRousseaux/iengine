@@ -57,7 +57,8 @@ public class ForwardChaining extends Algorithm
 						
 						if ( lSentence.getCount() == 0 )
 						{
-							if ( lSentence.getRightOperand() == fQuery )
+							System.out.println("comparing: " + lSentence.getRightOperand() + ", " + fQuery);
+							if ( lSentence.getRightOperand().equals(fQuery) )
 							{
 								fInferred.replace(lSentence.getRightOperand(), true);
 								
