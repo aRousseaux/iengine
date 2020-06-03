@@ -8,6 +8,7 @@ public class Clause extends HornClause
 	private String fLeft;
 	private String fDirectional;
 	private String fRight;
+	private int fCount;
 	
 	public Clause(String aClauseString)
 	{
@@ -16,13 +17,40 @@ public class Clause extends HornClause
 		String[] lClauses = aClauseString.split(fDirectional);
 		fLeft = lClauses[0]; 
 		fRight = lClauses[1];
+		
+		fCount = fLeft.split("&").length;
 	}
 	
 	public String toString()
 	{
 		return "Clause: " + fLeft + fDirectional + fRight;
 	}
-
+	
+	public int getCount()
+	{
+		return fCount;
+	}
+	
+	public void decrementCount()
+	{
+		fCount--;
+	}
+	
+	public void incrementCount()
+	{
+		fCount++;
+	}
+	
+	public String getLeftOperand()
+	{
+		return fLeft;
+	}
+	
+	public String getRightOperand()
+	{
+		return fRight;
+	}
+	
 	public List<String> getLiterals()
 	{
 		List<String> lResult = new ArrayList<String>();

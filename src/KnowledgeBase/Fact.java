@@ -22,6 +22,11 @@ public class Fact extends HornClause
 		return "Fact: " + fFact;
 	}
 
+	public String asString()
+	{
+		return fFact;
+	}
+	
 	public List<String> getLiterals() 
 	{
 		List<String> lResult = new ArrayList<String>();
