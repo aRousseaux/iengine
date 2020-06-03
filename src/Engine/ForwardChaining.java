@@ -48,7 +48,7 @@ public class ForwardChaining extends Algorithm
 		}
 		else
 		{
-			return "No";
+			return "NO";
 		}
 	}
 	
