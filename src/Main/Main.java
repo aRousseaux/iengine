@@ -35,7 +35,7 @@ public class Main
 				lAlgorithm = new ForwardChaining(lKnowledgeBase, lQuery);
 				break;
 			case "BC":
-				lAlgorithm = new BackwardChaining1(lKnowledgeBase, lQuery);
+				lAlgorithm = new BackwardChaining(lKnowledgeBase, lQuery);
 				break;
 			default:
 				lAlgorithm = new TruthTable(lKnowledgeBase, lQuery);

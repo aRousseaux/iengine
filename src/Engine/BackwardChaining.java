@@ -1,50 +1,44 @@
 package Engine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import KnowledgeBase.Fact;
+import KnowledgeBase.Clause;
 import KnowledgeBase.KnowledgeBase;
 
 public class BackwardChaining extends Algorithm
 {
 	private LinkedList<String> fAgenda;
-	private HashMap<String, Boolean> fInferred;
+	private List<String> fFacts;
+	private List<String> noProvedPath;
+	private List<String> provedPath;
 	
 	public BackwardChaining(KnowledgeBase aKnowledgeBase, String aQuery) 
 	{
 		super(aKnowledgeBase, aQuery, "Backward Chaining");
 		
 		fAgenda = new LinkedList<String>();
-		for ( Fact lFact : fKnowledge.getFacts() )
-		{
-			fAgenda.add( lFact.asString() );
-		}
+		fAgenda.push( fQuery );
 		
-		fInferred = new HashMap<String, Boolean>();
-		for (String lLiteral : fKnowledge.getLiterals())
-		{
-			fInferred.put(lLiteral, false);
-		}
+		fFacts = new ArrayList<String>();
+		noProvedPath = new ArrayList<String>();
+		provedPath = new ArrayList<String>();
 	}
 
 	public String execute() 
 	{
-		if ( FOL_BC_ASK() != null )
+		FOL_BC_ASK();
+		
+		if ( !noProvedPath.isEmpty() )
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.append("YES: ");
 			
-			for (Map.Entry<String, Boolean> lLiteral : fInferred.entrySet())
+			for (String lAnswer : noProvedPath)
 			{
-				if (lLiteral.getValue())
-				{
-					sb.append(lLiteral.getKey());
-					sb.append(",");
-				}
+				sb.append(lAnswer);
+				sb.append(",");
 			}
 			sb.deleteCharAt(sb.length()-1);
 			return sb.toString();
@@ -55,27 +49,80 @@ public class BackwardChaining extends Algorithm
 		}
 	}
 
-	private List<String> FOL_BC_ASK()
+	private boolean FOL_BC_ASK()
 	{
-		return FOL_BC_OR(new ArrayList<String>());
-	}
-	
-	private List<String> FOL_BC_OR(List<String> aTheta)
-	{
-		for (String lRule : FETCH_RULES_FOR_GOAL() )
+		while ( !fAgenda.isEmpty() )
 		{
-			
+			String lPath = fAgenda.pop();
+			if (!noProvedPath.contains(lPath))
+			{
+				noProvedPath.add(lPath);
+			}
+			if (!fFacts.contains(lPath))
+			{
+				List<Clause> queryContainsPath = new ArrayList<Clause>();
+				
+				for (Clause lSentence : fKnowledge.getClauses())
+				{
+					if (lSentence.getRightOperand().equals(lPath))
+					{
+						queryContainsPath.add(lSentence);
+					}
+				}
+				if (!queryContainsPath.isEmpty())
+				{
+					for (Clause lSentence : queryContainsPath)
+					{
+						for (String lSymbol : lSentence.getLeftLiterals())
+						{
+							if (!noProvedPath.contains(lSymbol))
+							{
+								fAgenda.push(lSymbol);
+							}
+						}
+					}
+				}
+			}
 		}
-		return null;
-	}
-	
-	private List<String> FETCH_RULES_FOR_GOAL()
-	{
-		return null;
-	}
-	
-	private List<String> STANDARDIZE_VARIABLES(List<String> aLHSRHS)
-	{
-		return null;
+		
+		for (String lSymbol : noProvedPath)
+		{
+			fAgenda.push(lSymbol);
+		}
+		
+		while ( !fAgenda.isEmpty() )
+		{
+			String lPath = fAgenda.pop();
+			if (fFacts.contains(lPath))
+			{
+				provedPath.add(lPath);
+			}
+			else
+			{
+				for ( Clause lSentence : fKnowledge.getClauses() )
+				{
+					if (!provedPath.contains(lPath))
+					{
+						if (lSentence.getRightOperand().equals(lPath))
+						{
+							for (String lSymbol: lSentence.getLeftLiterals())
+							{
+								if (fKnowledge.getFacts().contains(lSymbol))
+								{
+									lSentence.decrementCount();
+									if (lSentence.getCount() == 0)
+									{
+										fFacts.add(lPath);
+										fAgenda.push(lPath);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return true;
 	}
 }

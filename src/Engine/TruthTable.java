@@ -72,9 +72,6 @@ public class TruthTable extends Algorithm
 			HashMap<String, Boolean> lFalseModel = (HashMap<String, Boolean>) aModel.clone();
 			lFalseModel.put(lP, false);
 			
-			System.out.println(lTrueModel);
-			System.out.println(lFalseModel);
-			
 			return ( TT_CHECK_ALL(lRest, lTrueModel ) ) && ( TT_CHECK_ALL(lRest, lFalseModel ) );
 		}
 	}
