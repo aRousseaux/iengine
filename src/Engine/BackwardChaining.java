@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import KnowledgeBase.Clause;
+import KnowledgeBase.Fact;
 import KnowledgeBase.KnowledgeBase;
 
 public class BackwardChaining extends Algorithm
@@ -107,13 +108,16 @@ public class BackwardChaining extends Algorithm
 						{
 							for (String lSymbol: lSentence.getLeftLiterals())
 							{
-								if (fKnowledge.getFacts().contains(lSymbol))
+								for (Fact lFact : fKnowledge.getFacts())
 								{
-									lSentence.decrementCount();
-									if (lSentence.getCount() == 0)
+									if (lFact.isEqual(lSymbol))
 									{
-										fFacts.add(lPath);
-										fAgenda.push(lPath);
+										lSentence.decrementCount();
+										if (lSentence.getCount() == 0)
+										{
+											fFacts.add(lPath);
+											fAgenda.push(lPath);
+										}
 									}
 								}
 							}
