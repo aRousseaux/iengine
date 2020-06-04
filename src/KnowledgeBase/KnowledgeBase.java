@@ -57,6 +57,11 @@ public class KnowledgeBase
 		return lResult;
 	}
 	
+	public List<HornClause> getAll()
+	{
+		return fClauses;
+	}
+	
 	public HashSet<String> getLiterals()
 	{
 		return fLiterals;

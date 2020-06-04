@@ -27,6 +27,11 @@ public class Fact extends HornClause
 		return fFact;
 	}
 	
+	public String getRightOperand()
+	{
+		return fFact;
+	}
+	
 	public List<String> getLiterals() 
 	{
 		List<String> lResult = new ArrayList<String>();

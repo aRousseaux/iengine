@@ -3,7 +3,9 @@ package Engine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import KnowledgeBase.Clause;
 import KnowledgeBase.KnowledgeBase;
 
 public class TruthTable extends Algorithm
@@ -73,12 +75,62 @@ public class TruthTable extends Algorithm
 	// returns true if a sentence holds within a model
 	private boolean PL_TRUE( HashMap<String, Boolean> aModel )
 	{
-		return false;
+		boolean results = true;
+		
+		for ( Clause lSentence : fKnowledge.getClauses() )
+		{
+			boolean lLeft = true;
+			boolean lRight = PL_TRUE( lSentence.getRightOperand(), aModel );
+			boolean result = false;
+			
+			if (lSentence instanceof Clause)
+			{
+				if ( lSentence.getCount() == 1 )
+				{
+					lLeft = PL_TRUE(lSentence.getLeftOperand(), aModel);
+				}
+				else if ( lSentence.getCount() > 1 )
+				{
+					for (String lLiteral : lSentence.getLeftLiterals())
+					{
+						lLeft = lLeft && PL_TRUE(lLiteral, aModel);
+					}
+				}
+				
+				if ( (lLeft == true) && (lRight == false) )
+				{
+					result = false;
+				}
+				else
+				{
+					result = true;
+				}
+			}
+			else
+			{
+				result = lRight;
+			}
+			
+			if (result == false)
+			{
+				results = false;
+			}
+		}
+		
+		return results;
 	}
 	
 	// returns true if a sentence holds within a model
 	private boolean PL_TRUE( String aQuery, HashMap<String, Boolean> aModel )
 	{
+		for( Map.Entry<String, Boolean> lEntry : aModel.entrySet() )
+		{
+			if ( aQuery.equals( lEntry.getKey() ) )
+			{
+				return lEntry.getValue();
+			}
+		}
+		
 		return false;
 	}
 }
