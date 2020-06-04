@@ -19,7 +19,7 @@ public class BackwardChaining extends Algorithm
 	public BackwardChaining(KnowledgeBase aKnowledgeBase, String aQuery) 
 	{
 		super(aKnowledgeBase, aQuery, "Backward Chaining");
-		
+		// agenda starts with all known facts (data driven)
 		fAgenda = new LinkedList<String>();
 		fAgenda.push( fQuery );
 		
@@ -46,6 +46,7 @@ public class BackwardChaining extends Algorithm
 				sb.append(lAnswer);
 				sb.append(",");
 			}
+			// remove final comma
 			sb.deleteCharAt(sb.length()-1);
 			return sb.toString();
 		}
@@ -57,9 +58,13 @@ public class BackwardChaining extends Algorithm
 
 	private boolean FOL_BC_ASK()
 	{
+		// first find the path of the query
+		// continue until nothing in agenda
 		while ( !fAgenda.isEmpty() )
 		{
+			// grab the first thing on the agenda
 			String lPath = fAgenda.pop();
+			
 			if (!noProvedPath.contains(lPath))
 			{
 				noProvedPath.add(lPath);
@@ -97,6 +102,8 @@ public class BackwardChaining extends Algorithm
 		Collections.reverse(noProvedPath);
 		List<String> notSecond = new ArrayList<String>();
 		List<String> notFirst = new ArrayList<String>();
+		
+		//If noProvedPath and provedPath are same then its true
 		for (String lPath : noProvedPath)
 		{
 			if (!provedPath.contains(lPath))
@@ -111,7 +118,7 @@ public class BackwardChaining extends Algorithm
 		
 		return notSecond.isEmpty() && notFirst.isEmpty();
 	}
-	
+	// function that prove the path
 	private void FOL_BC_COMPARE()
 	{
 		for (String lSymbol : noProvedPath)
@@ -141,6 +148,7 @@ public class BackwardChaining extends Algorithm
 									if (lFact.isEqual(lSymbol))
 									{
 										lSentence.decrementCount();
+										// if all symbols are inferred before the implication
 										if (lSentence.getCount() == 0)
 										{
 											fFacts.add(lPath);
