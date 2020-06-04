@@ -28,7 +28,9 @@ public class TruthTable extends Algorithm
 
 	public String execute() 
 	{
-		if (TT_Entails())
+		TT_Entails();
+		
+		if (fCount > 0)
 		{
 			return "YES: " + fCount;
 		}
@@ -43,12 +45,14 @@ public class TruthTable extends Algorithm
 		return TT_CHECK_ALL( fLiterals, new HashMap<String, Boolean>() );
 	}
 	
+	@SuppressWarnings("unchecked")
 	private boolean TT_CHECK_ALL( List<String> aSymbols, HashMap<String, Boolean> aModel )
 	{
-		if ( !aSymbols.isEmpty() )
+		if ( aSymbols.isEmpty() )
 		{
 			if ( PL_TRUE( aModel ) )
 			{
+				fCount++;
 				return PL_TRUE( fQuery, aModel );
 			}
 			else
@@ -63,10 +67,13 @@ public class TruthTable extends Algorithm
 			List<String> lRest = aSymbols;
 			lRest.remove(0);
 			
-			HashMap<String, Boolean> lTrueModel = aModel; 
+			HashMap<String, Boolean> lTrueModel = (HashMap<String, Boolean>) aModel.clone(); 
 			lTrueModel.put(lP, true);
-			HashMap<String, Boolean> lFalseModel = aModel; 
+			HashMap<String, Boolean> lFalseModel = (HashMap<String, Boolean>) aModel.clone();
 			lFalseModel.put(lP, false);
+			
+			System.out.println(lTrueModel);
+			System.out.println(lFalseModel);
 			
 			return ( TT_CHECK_ALL(lRest, lTrueModel ) ) && ( TT_CHECK_ALL(lRest, lFalseModel ) );
 		}
@@ -114,9 +121,10 @@ public class TruthTable extends Algorithm
 			if (result == false)
 			{
 				results = false;
+				break;
 			}
 		}
-		
+
 		return results;
 	}
 	
