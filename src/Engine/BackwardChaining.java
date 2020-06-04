@@ -32,7 +32,7 @@ public class BackwardChaining extends Algorithm
 	{
 		FOL_BC_ASK();
 		
-		if ( !noProvedPath.isEmpty() )
+		if ( !provedPath.isEmpty() )
 		{
 			System.out.println(fFacts);
 			System.out.println(fAgenda);
@@ -69,6 +69,7 @@ public class BackwardChaining extends Algorithm
 			{
 				noProvedPath.add(lPath);
 			}
+			
 			if (!fFacts.contains(lPath))
 			{
 				List<Clause> queryContainsPath = new ArrayList<Clause>();
@@ -80,6 +81,7 @@ public class BackwardChaining extends Algorithm
 						queryContainsPath.add(lSentence);
 					}
 				}
+				
 				if (!queryContainsPath.isEmpty())
 				{
 					for (Clause lSentence : queryContainsPath)
@@ -118,6 +120,7 @@ public class BackwardChaining extends Algorithm
 		
 		return notSecond.isEmpty() && notFirst.isEmpty();
 	}
+	
 	// function that prove the path
 	private void FOL_BC_COMPARE()
 	{
