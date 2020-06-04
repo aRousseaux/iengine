@@ -1,6 +1,7 @@
 package Engine;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,6 +34,10 @@ public class BackwardChaining extends Algorithm
 		
 		if ( !noProvedPath.isEmpty() )
 		{
+			System.out.println(fFacts);
+			System.out.println(fAgenda);
+			System.out.println(noProvedPath);
+			System.out.println(provedPath);
 			StringBuilder sb = new StringBuilder();
 			sb.append("YES: ");
 			
@@ -86,6 +91,29 @@ public class BackwardChaining extends Algorithm
 			}
 		}
 		
+		FOL_BC_COMPARE();
+		FOL_BC_COMPARE();
+		
+		Collections.reverse(noProvedPath);
+		List<String> notSecond = new ArrayList<String>();
+		List<String> notFirst = new ArrayList<String>();
+		for (String lPath : noProvedPath)
+		{
+			if (!provedPath.contains(lPath))
+				notSecond.add(lPath);
+		}
+		for (String lPath : provedPath)
+		{
+			if (!noProvedPath.contains(lPath))
+				notFirst.add(lPath);
+		}
+		
+		
+		return notSecond.isEmpty() && notFirst.isEmpty();
+	}
+	
+	private void FOL_BC_COMPARE()
+	{
 		for (String lSymbol : noProvedPath)
 		{
 			fAgenda.push(lSymbol);
@@ -126,7 +154,5 @@ public class BackwardChaining extends Algorithm
 				}
 			}
 		}
-		
-		return true;
 	}
 }

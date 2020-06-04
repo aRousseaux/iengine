@@ -83,7 +83,7 @@ public class ForwardChaining extends Algorithm
 			}
 		}
 		
-		System.out.println(fInferred);
+		// System.out.println(fInferred);
 		return false;
 	}
 }
